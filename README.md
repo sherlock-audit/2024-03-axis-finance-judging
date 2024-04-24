@@ -139,6 +139,27 @@ index a77585b..48c39d5 100644
                  auctionModule.auction(lotId, params_, quoteTokenDecimals, baseTokenDecimals);
 ```
 
+
+
+## Discussion
+
+**sherlock-admin4**
+
+The protocol team fixed this issue in the following PRs/commits:
+https://github.com/Axis-Fi/moonraker/pull/132
+
+
+**10xhash**
+
+> The protocol team fixed this issue in the following PRs/commits: [Axis-Fi/moonraker#132](https://github.com/Axis-Fi/moonraker/pull/132)
+
+Fixed
+Latest lotId is read before usage
+
+**sherlock-admin4**
+
+The Lead Senior Watson signed off on the fix.
+
 # Issue H-2: [M-1] 
 
 Source: https://github.com/sherlock-audit/2024-03-axis-finance-judging/issues/21 
@@ -241,10 +262,6 @@ Check if the `prefundingRefund > 0` like this:
 
 ## Discussion
 
-**sherlock-admin4**
-
-The protocol team fixed this issue in PR/commit https://github.com/Axis-Fi/moonraker/pull/109.
-
 **nevillehuang**
 
 #21, #31 and #112 highlights the same issue of `prefundingRefund = 0`
@@ -252,6 +269,23 @@ The protocol team fixed this issue in PR/commit https://github.com/Axis-Fi/moonr
 #78 and #97  highlights the same less likely issue of `totalInLessFees = 0`
 
 All points to same underlying root cause of such tokens not allowing transfer of zero, so duplicating them. Although this involves a specific type of ERC20, the impact could be significant given seller's fund would be locked permanently
+
+**sherlock-admin4**
+
+The protocol team fixed this issue in the following PRs/commits:
+https://github.com/Axis-Fi/moonraker/pull/142
+
+
+**10xhash**
+
+> The protocol team fixed this issue in the following PRs/commits: [Axis-Fi/moonraker#142](https://github.com/Axis-Fi/moonraker/pull/142)
+
+Fixed
+Now Transfer library only transfers token if amount > 0
+
+**sherlock-admin4**
+
+The Lead Senior Watson signed off on the fix.
 
 # Issue H-3: Module's gas yield can never be claimed and all yield will be lost 
 
@@ -316,6 +350,23 @@ abstract contract BlastGas {
 **nevillehuang**
 
 Valid, due to this [comment](https://github.com/sherlock-audit/2024-03-axis-finance/blob/cadf331f12b485bac184111cdc9ba1344d9fbf01/moonraker/src/blast/modules/BlastGas.sol#L12) within the contract indicating interest in claiming gas yield but it can never be claimed
+
+**sherlock-admin4**
+
+The protocol team fixed this issue in the following PRs/commits:
+https://github.com/Axis-Fi/moonraker/pull/144
+
+
+**10xhash**
+
+> The protocol team fixed this issue in the following PRs/commits: [Axis-Fi/moonraker#144](https://github.com/Axis-Fi/moonraker/pull/144)
+
+Fixed
+Now `configureClaimableGa()` is invoked inside constructor
+
+**sherlock-admin4**
+
+The Lead Senior Watson signed off on the fix.
 
 # Issue H-4: Auction creators have the ability to lock bidders' funds. 
 
@@ -461,6 +512,27 @@ function _revertIfLotConcluded(uint96 lotId_) internal view virtual {
 }
 ```
 
+
+
+## Discussion
+
+**sherlock-admin4**
+
+The protocol team fixed this issue in the following PRs/commits:
+https://github.com/Axis-Fi/moonraker/pull/105
+
+
+**10xhash**
+
+> The protocol team fixed this issue in the following PRs/commits: [Axis-Fi/moonraker#105](https://github.com/Axis-Fi/moonraker/pull/105)
+
+Fixed
+start and conclusion timestamps of auction is now made consistent across all functions
+
+**sherlock-admin4**
+
+The Lead Senior Watson signed off on the fix.
+
 # Issue H-5: Bidders can not claim their bids if the auction creator claims the proceeds. 
 
 Source: https://github.com/sherlock-audit/2024-03-axis-finance-judging/issues/67 
@@ -561,6 +633,23 @@ Allow `bidders` to claim their `bids` even when the `auction status` is `Claimed
 **Oighty**
 
 Duplicate of #18 
+
+**sherlock-admin4**
+
+The protocol team fixed this issue in the following PRs/commits:
+https://github.com/Axis-Fi/moonraker/pull/139
+
+
+**10xhash**
+
+> The protocol team fixed this issue in the following PRs/commits: [Axis-Fi/moonraker#139](https://github.com/Axis-Fi/moonraker/pull/139)
+
+Fixed
+The claimed status is replaced with a boolean. Hence the status of a settled auction will now always remain settled
+
+**sherlock-admin4**
+
+The Lead Senior Watson signed off on the fix.
 
 # Issue H-6: Bidders' funds may become locked due to inconsistent price order checks in MaxPriorityQueue and the _claimBid function. 
 
@@ -707,6 +796,23 @@ In the `MaxPriorityQueue`, we should check the `price`: `Math.mulDivUp(q, 10 ** 
 
 Believe this is valid due to bids below marginal price being able to claim, which would result in a winning bidder not receiving theirs. Need to think about the remediation a bit more. There are some other precision issues with the rounding up.
 
+**sherlock-admin4**
+
+The protocol team fixed this issue in the following PRs/commits:
+https://github.com/Axis-Fi/moonraker/pull/146
+
+
+**10xhash**
+
+> The protocol team fixed this issue in the following PRs/commits: [Axis-Fi/moonraker#146](https://github.com/Axis-Fi/moonraker/pull/146)
+
+Fixed
+Now same computation is used for queue and marginal price calculations
+
+**sherlock-admin4**
+
+The Lead Senior Watson signed off on the fix.
+
 # Issue H-7: Overflow in curate() function, results in permanently stuck funds 
 
 Source: https://github.com/sherlock-audit/2024-03-axis-finance-judging/issues/88 
@@ -833,6 +939,31 @@ unchecked {
 }
 ```
 so that when overflow occurs, the transaction will revert, or better yet also change the funding variable type from ``uint96`` to ``uint256`` this way sellers can create big enough auctions, and provide sufficient curator fee in order to bootstrap their protocol successfully .
+
+
+
+## Discussion
+
+**sherlock-admin4**
+
+The protocol team fixed this issue in the following PRs/commits:
+https://github.com/Axis-Fi/moonraker/pull/141
+
+
+**10xhash**
+
+> The protocol team fixed this issue in the following PRs/commits: [Axis-Fi/moonraker#141](https://github.com/Axis-Fi/moonraker/pull/141)
+
+Fixed in https://github.com/Axis-Fi/moonraker/pull/130 by using uint256 hence avoiding unsafe casting. Confirmation tests added in PR 141
+
+**sherlock-admin4**
+
+The Lead Senior Watson signed off on the fix.
+
+**PseudoArtistHacks**
+
+I think all the issues regarding overflow/underflow should be duped with each other
+The root cause of all the issues are same i.e unsafe casting
 
 # Issue H-8: It is possible to DoS batch auctions by submitting invalid AltBn128 points when bidding 
 
@@ -1073,6 +1204,23 @@ function isValid(Point memory p) public pure returns (bool) {
 
 Duplicate of https://github.com/sherlock-audit/2024-03-axis-finance-judging/issues/185
 
+**sherlock-admin4**
+
+The protocol team fixed this issue in the following PRs/commits:
+https://github.com/Axis-Fi/moonraker/pull/138
+
+
+**10xhash**
+
+> The protocol team fixed this issue in the following PRs/commits: [Axis-Fi/moonraker#138](https://github.com/Axis-Fi/moonraker/pull/138)
+
+Fixed
+Now coordinates are checked to be less than FIELD_MODULUS
+
+**sherlock-admin4**
+
+The Lead Senior Watson signed off on the fix.
+
 # Issue H-9: Downcasting to uint96 can cause assets to be lost for some tokens 
 
 Source: https://github.com/sherlock-audit/2024-03-axis-finance-judging/issues/181 
@@ -1132,6 +1280,224 @@ Pretty similar to #209. Might be a duplicate.
 **nevillehuang**
 
 Agree both hinges on a high `totalAmountIn`
+
+**kosedogus**
+
+Escalate
+
+Since there are minutes until the end of auction period, I might miss something, if that is the case sorry about that.
+
+`_settle` calls `_getLotMarginalPrice` to get the `totalAmountIn`. 
+The loop which adds `amountIn`'s to `totalAmountIn` does not add every individual bid, if the latest bid filled the capacity loop breaks.
+capacity is taken from lotData as we can see:
+```solidity
+uint256 capacity = lotData[lotId_].capacity;
+```
+And the capacity in lotData is uint96:
+```solidity
+    mapping(uint96 id => Lot lot) public lotData;
+...
+    struct Lot {
+        uint48 start; // 6 +
+        uint48 conclusion; //
+        uint8 quoteTokenDecimals;
+        uint8 baseTokenDecimals;
+        bool capacityInQuote;
+        uint96 capacity;
+        uint96 sold;
+        uint96 purchased;
+        uint96 partialPayout;
+    }
+```
+Hence the capacity itself is below max value of uint96 inherently, and if we exceed capacity with the latest bid, then loop breaks.
+So what happens to latest bid?
+It's bidId is recorded and it is only partially filled, the excess is removed from `totalAmountIn` as we can see below:
+```solidity
+                if (result.capacityExpended >= capacity) {
+                    result.marginalPrice = price;
+                    result.marginalBidId = bidId;
+                    if (result.capacityExpended > capacity) {
+                        result.partialFillBidId = bidId;
+                    }
+                    break;
+```
+```solidity
+            if (result.partialFillBidId != 0) {
+                // Load routing and bid data
+                Bid storage bidData = bids[lotId_][result.partialFillBidId];
+
+                // Set the bidder on for the partially filled bid
+                settlement_.pfBidder = bidData.bidder;
+                settlement_.pfReferrer = bidData.referrer;
+
+                // Calculate the payout and refund amounts
+                uint256 fullFill =
+                    Math.mulDivDown(uint256(bidData.amount), baseScale, result.marginalPrice);
+                uint256 excess = result.capacityExpended - capacity;
+                settlement_.pfPayout = uint96(fullFill - excess);
+                settlement_.pfRefund =
+                    uint96(Math.mulDivDown(uint256(bidData.amount), excess, fullFill));
+
+                // Reduce the total amount in by the refund amount
+                result.totalAmountIn -= settlement_.pfRefund;
+```
+Hence it seems like `totalAmountIn` can not possibly pass capacity which is uint96. If it can not pass uint96, there can't be any overflow.
+
+**sherlock-admin2**
+
+> Escalate
+> 
+> Since there are minutes until the end of auction period, I might miss something, if that is the case sorry about that.
+> 
+> `_settle` calls `_getLotMarginalPrice` to get the `totalAmountIn`. 
+> The loop which adds `amountIn`'s to `totalAmountIn` does not add every individual bid, if the latest bid filled the capacity loop breaks.
+> capacity is taken from lotData as we can see:
+> ```solidity
+> uint256 capacity = lotData[lotId_].capacity;
+> ```
+> And the capacity in lotData is uint96:
+> ```solidity
+>     mapping(uint96 id => Lot lot) public lotData;
+> ...
+>     struct Lot {
+>         uint48 start; // 6 +
+>         uint48 conclusion; //
+>         uint8 quoteTokenDecimals;
+>         uint8 baseTokenDecimals;
+>         bool capacityInQuote;
+>         uint96 capacity;
+>         uint96 sold;
+>         uint96 purchased;
+>         uint96 partialPayout;
+>     }
+> ```
+> Hence the capacity itself is below max value of uint96 inherently, and if we exceed capacity with the latest bid, then loop breaks.
+> So what happens to latest bid?
+> It's bidId is recorded and it is only partially filled, the excess is removed from `totalAmountIn` as we can see below:
+> ```solidity
+>                 if (result.capacityExpended >= capacity) {
+>                     result.marginalPrice = price;
+>                     result.marginalBidId = bidId;
+>                     if (result.capacityExpended > capacity) {
+>                         result.partialFillBidId = bidId;
+>                     }
+>                     break;
+> ```
+> ```solidity
+>             if (result.partialFillBidId != 0) {
+>                 // Load routing and bid data
+>                 Bid storage bidData = bids[lotId_][result.partialFillBidId];
+> 
+>                 // Set the bidder on for the partially filled bid
+>                 settlement_.pfBidder = bidData.bidder;
+>                 settlement_.pfReferrer = bidData.referrer;
+> 
+>                 // Calculate the payout and refund amounts
+>                 uint256 fullFill =
+>                     Math.mulDivDown(uint256(bidData.amount), baseScale, result.marginalPrice);
+>                 uint256 excess = result.capacityExpended - capacity;
+>                 settlement_.pfPayout = uint96(fullFill - excess);
+>                 settlement_.pfRefund =
+>                     uint96(Math.mulDivDown(uint256(bidData.amount), excess, fullFill));
+> 
+>                 // Reduce the total amount in by the refund amount
+>                 result.totalAmountIn -= settlement_.pfRefund;
+> ```
+> Hence it seems like `totalAmountIn` can not possibly pass capacity which is uint96. If it can not pass uint96, there can't be any overflow.
+
+You've created a valid escalation!
+
+To remove the escalation from consideration: Delete your comment.
+
+You may delete or edit your escalation comment anytime before the 48-hour escalation window closes. After that, the escalation becomes final.
+
+**kosedogus**
+
+
+> Since there are minutes until the end of **_auction_** period, I might miss something, if that is the case sorry about that.
+
+:smile: 
+
+**sherlock-admin4**
+
+The protocol team fixed this issue in the following PRs/commits:
+https://github.com/Axis-Fi/moonraker/pull/130
+
+
+**nevillehuang**
+
+@kosedogus I do not quite get your escalation point. Maybe a PoC could help me decipher it. I see a clear loss of funds here from downcasting.
+
+Cc @10xhash @Oighty 
+
+**Oighty**
+
+Adding a bunch of `uint96` amounts together can exceed `type(uint96).max` so casting `totalAmountIn` from a `uint256` to a `uint96` can overflow.
+
+**kosedogus**
+
+What I was saying, **capacity** is itself uint96.During loop that adds amountIn's together, everything copied as a uint256 and calculations are done with uint256 so that overflow won't occur. If adding a bid to totalAmountIn made it pass **capacity** (which is normally uint96, but for the purpose of preventing overflow it is copied as uint256 before this check), then loop breaks. The amount that exceeds capacity removed from totalAmountIn before it is downcasted to uint96. So totalAmountIn can be at most same with **capacity** in the end, which is uint96. So there won't be overflow.
+
+**Evert0x**
+
+@nevillehuang any reply to the latest comment?
+
+**nevillehuang**
+
+@kosedogus @10xhash Could you guys verify the escalation [comment](https://github.com/sherlock-audit/2024-03-axis-finance-judging/issues/181#issuecomment-2049888416)? Based on comment [here](https://github.com/sherlock-audit/2024-03-axis-finance/blob/cadf331f12b485bac184111cdc9ba1344d9fbf01/moonraker/src/modules/auctions/EMPAM.sol#L655) overflow is still possible no on the last bid added correct? I think a PoC could verify the claim and the issue.
+
+**10xhash**
+
+> @kosedogus @10xhash Could you guys verify the escalation [comment](https://github.com/sherlock-audit/2024-03-axis-finance-judging/issues/181#issuecomment-2049888416)? Based on comment [here](https://github.com/sherlock-audit/2024-03-axis-finance/blob/cadf331f12b485bac184111cdc9ba1344d9fbf01/moonraker/src/modules/auctions/EMPAM.sol#L655) overflow is still possible no on the last bid added correct? I think a PoC could verify the claim and the issue.
+
+The capacity is the amount of base token the seller wants to sell while amountIn is the amount of quote tokens that are paid by buyers. So the uint96 constrain on capacity is not related with totalAmountIn
+
+Eg:
+uint96 capacity = 3 * 1e6 * 1e18; // 3million 
+uint price = 32702 ; // price of usd in shiba 
+uint totalAmountIn = capacity * price == 98106000000000000000000000000; // > uint96.max
+
+this totalAmountIn can be sum of smaller bids ie. 10 bids each of 9810600000000000000000000000, where each is less than uint96.max
+
+**kosedogus**
+
+Yeah it was an oversight from my side I guess, thank you for clarification :)
+
+**0xJem**
+
+totalAmountIn is the sum of `amountIn` from bids (each of which is maximum uint96), and can overflow uint96. The lot capacity is unrelated to this.
+
+**10xhash**
+
+> The protocol team fixed this issue in the following PRs/commits: [Axis-Fi/moonraker#130](https://github.com/Axis-Fi/moonraker/pull/130)
+
+Fixed
+uint256 is now used avoiding the unsafe casting
+
+**sherlock-admin4**
+
+The Lead Senior Watson signed off on the fix.
+
+**Evert0x**
+
+@kosedogus do I understand correctly that you agree the issue is valid?
+
+**kosedogus**
+
+@Evert0x yes sir 
+
+**Evert0x**
+
+Result:
+High
+Has Duplicates
+
+**sherlock-admin3**
+
+Escalations have been resolved successfully!
+
+Escalation status:
+- [kosedogus](https://github.com/sherlock-audit/2024-03-axis-finance-judging/issues/181/#issuecomment-2048379367): rejected
 
 # Issue H-10: Incorrect `prefundingRefund` calculation will disallow claiming 
 
@@ -1219,7 +1585,20 @@ uint96 prefundingRefund = capacity - sold_ + curatorFeesAdjustment (how much was
 
 **sherlock-admin4**
 
-The protocol team fixed this issue in PR/commit https://github.com/Axis-Fi/moonraker/pull/111.
+The protocol team fixed this issue in the following PRs/commits:
+https://github.com/Axis-Fi/moonraker/pull/140
+
+
+**10xhash**
+
+> The protocol team fixed this issue in the following PRs/commits: [Axis-Fi/moonraker#140](https://github.com/Axis-Fi/moonraker/pull/140)
+
+Fixed
+Seller refund calculation is changed to  `uint256 prefundingRefund = capacity_ - sold_ + maxCuratorPayout - curatorPayout`
+
+**sherlock-admin4**
+
+The Lead Senior Watson signed off on the fix.
 
 # Issue M-1: Attacker can forbid users to get refunded if sends enough bids on the EMPAM module 
 
@@ -1284,73 +1663,28 @@ The mapping should be from bidId to its position in the array. When a bid is ref
 
 **nevillehuang**
 
-Believe #41 and #237 to not be duplicates based on different fix and code logic involved:
+Believe #41 and #237 to not be duplicates based on different fix and code logic involved for (refunding/decrypting/settling mechanisms)
 
 > The fix isn't the same because we need to remove a loop from the refundBid function. The settle fix involves refactoring to allow a multi-txn process or decreasing the gas cost of it. Not really a good way to remove the loop from settle
 
-# Issue M-2: The auction creator has control over the auction process. 
+**sherlock-admin4**
 
-Source: https://github.com/sherlock-audit/2024-03-axis-finance-judging/issues/80 
-
-## Found by 
-ether\_sky
-## Summary
-While no one should have control over an ongoing `auction`, the `auction creator`, who possesses the `private key`, can influence the `auction` by decrypting the `bid` information.
-Unfortunately, this can result in several undesirable outcomes.
-## Vulnerability Detail
-During the `auctions`, the `creators` can access and decrypt `bids` using the `private key`.
-Consequently, they gain insight into the ongoing `auctions'` status.
-The `auction creator` can have several chocies.
-1. `Aggressive Bidding`.
-If the `creator` believes that `bidders'` prices are insufficient, they can place a `bid` at the highest price.
-While this may result in some loss, it allows them to pay `fees` in `quote` tokens while preserving `base` tokens.
-`Bidders`, however, can not acquire `base` tokens.
-2. `Strategic Bidding`
-Alternatively, the `creator` can `bid` at an appropriate price for optimal results.
-For instance, consider `bids (q1, p1), (q2, p2), (q3, p3) ...` where `p1 > p2 > p3`.
-if `q1 + q2` doesn't fill the `capacity`, the `auction` involves the third `bid`, and the `marginal price` falls to `p3`.
-Suppose the `creator` desires `quote` tokens at price `p2`: he can create a `bid` with price `p2` and `quote` tokens to fill the `capacity`.
-Consequently, he can acquire `q1 + q2` tokens at price `p2`.
-3. `Mitigating Failure`
-If `quote` amounts fall short of the required amounts, the `auction` is considered unsuccessful,.
-```solidity
-function _settle(uint96 lotId_)
-    internal
-    override
-    returns (Settlement memory settlement_, bytes memory auctionOutput_)
-{
-    if (
-        result.capacityExpended >= auctionData[lotId_].minFilled
-            && result.marginalPrice >= lotAuctionData.minPrice
-    ) { }
-}
-```
-To prevent this, the `auction creator` can create a `bid` with a small amount of `quote` tokens to fill the `auction`.
-## Impact
-
-## Code Snippet
-https://github.com/sherlock-audit/2024-03-axis-finance/blob/cadf331f12b485bac184111cdc9ba1344d9fbf01/moonraker/src/modules/auctions/EMPAM.sol#L791-L794
-## Tool used
-
-Manual Review
-
-## Recommendation
-```solidity
-- mapping(uint96 lotId => mapping(uint64 bidId => EncryptedBid)) public encryptedBids;
-+ mapping(uint96 lotId => mapping(uint64 bidId => EncryptedBid)) private encryptedBids;
-```
+The protocol team fixed this issue in the following PRs/commits:
+https://github.com/Axis-Fi/moonraker/pull/145
 
 
+**10xhash**
 
-## Discussion
+> The protocol team fixed this issue in the following PRs/commits: [Axis-Fi/moonraker#145](https://github.com/Axis-Fi/moonraker/pull/145)
 
-**Oighty**
+Fixed
+Now the index of the bid to be refunded is passed avoiding the iteration of the entire list. 
 
-The key assumption here is that the seller (auction creator) has the private key that corresponds to the public key for the auction, but that doesn't necessarily have to be case. Axis has implemented a key management service that provides a new BN254 public key to a user, stores the private key, and then releases the key to anyone who calls the API after the auction ends. Similarly, multi-party computation (MPC) protocols are being built that could do this in a decentralized way, e.g. Lit Protocol.
+**sherlock-admin4**
 
-I agree that the seller could have the private key and the scenarios you lay out are plausible, but it depends on external factors, including where the key is held. We can't enforce using a key-pair that the seller doesn't have custody of, but we can encourage it through the off-chain tooling we provide for use in auctions.
+The Lead Senior Watson signed off on the fix.
 
-# Issue M-3: If pfBidder gets blacklisted the settlement process would be broken and every other bidders and the seller would lose their funds 
+# Issue M-2: If pfBidder gets blacklisted the settlement process would be broken and every other bidders and the seller would lose their funds 
 
 Source: https://github.com/sherlock-audit/2024-03-axis-finance-judging/issues/90 
 
@@ -1450,63 +1784,22 @@ Separate the payout and refunding logic for pfBidder from the settlement process
 
 **sherlock-admin4**
 
-The protocol team fixed this issue in PR/commit https://github.com/Axis-Fi/moonraker/pull/119.
-
-# Issue M-4: BlastAuctionHouse contract has wrong WETH and USDB addresses as immutables which leads to lost yield 
-
-Source: https://github.com/sherlock-audit/2024-03-axis-finance-judging/issues/91 
-
-## Found by 
-Angry\_Mustache\_Man, FindEverythingX, cryptic, enfrasico, hash, seeques, underdog, web3tycoon, yotov721
-## Summary
-The `BlastAuctionHouse` contract has WETH and USDB addresses as constants assigned to the WETH and USDB testnet addresses. In blast developer documentation:
-```solidity
-contract MyContract {
-  // NOTE: these addresses differ on the Blast mainnet and testnet; the lines below are the mainnet addresses
-  IERC20Rebasing public constant USDB = IERC20Rebasing(0x4300000000000000000000000000000000000003);
-  IERC20Rebasing public constant WETH = IERC20Rebasing(0x4300000000000000000000000000000000000004);
-  // NOTE: the commented lines below are the testnet addresses
-  // IERC20Rebasing public constant USDB = IERC20Rebasing(0x4200000000000000000000000000000000000022);
-  // IERC20Rebasing public constant WETH = IERC20Rebasing(0x4200000000000000000000000000000000000023);
-```
-In the `BlastAuctionHouse` contract:
-```solidity
-    /// @notice    Blast contract for claiming gas fees
-    IBlast internal constant _BLAST = IBlast(0x4300000000000000000000000000000000000002);
-
-    /// @notice    Address of the WETH contract on Blast
-    IERC20Rebasing internal constant _WETH =
-        IERC20Rebasing(0x4200000000000000000000000000000000000023); //@audit this is a testnet addresses
-        
-    /// @notice    Address of the USDB contract on Blast
-    IERC20Rebasing internal constant _USDB =
-        IERC20Rebasing(0x4200000000000000000000000000000000000022); //@audit
-
-```
-This may result in unexpected behavior in smart contracts. If the constructor wouldn't revert, then at worst the yield for WETH and USDB would be lost.
-## Vulnerability Detail
-See summary
-## Impact
-DoS of contract creation or lost yield
-## Code Snippet
-https://github.com/sherlock-audit/2024-03-axis-finance/blob/main/moonraker/src/blast/BlastAuctionHouse.sol#L32-L44
-## Tool used
-
-Manual Review
-
-## Recommendation
-Check for the correct addresses at:
-https://docs.blast.io/building/guides/weth-yield
+The protocol team fixed this issue in the following PRs/commits:
+https://github.com/Axis-Fi/moonraker/pull/140
 
 
+**10xhash**
 
-## Discussion
+> The protocol team fixed this issue in the following PRs/commits: [Axis-Fi/moonraker#140](https://github.com/Axis-Fi/moonraker/pull/140)
 
-**Oighty**
+Fixed
+Now the payment of partial bid is separated from the settlement
 
-Duplicate of #73 
+**sherlock-admin4**
 
-# Issue M-5: Unsold tokens from a FPAM auction, will be stuck in the protocol, after the auction concludes 
+The Lead Senior Watson signed off on the fix.
+
+# Issue M-3: Unsold tokens from a FPAM auction, will be stuck in the protocol, after the auction concludes 
 
 Source: https://github.com/sherlock-audit/2024-03-axis-finance-judging/issues/94 
 
@@ -1626,369 +1919,28 @@ Manual Review & Foundry
 ## Recommendation
 Implement a function, that allows sellers to withdraw the amount left for a prefunded **FPAM** auction they have created, once the auction has concluded. 
 
-# Issue M-6: Curator can inflate fee right before accepting an invitation for an auction 
-
-Source: https://github.com/sherlock-audit/2024-03-axis-finance-judging/issues/111 
-
-## Found by 
-flacko, ydlee
-## Summary
-A curator can inflate their fee to a higher one than promoted to an auction's seller right before accepting the invitation to curate the auction and thus charging the seller more and incurring unexpected costs for them.
-## Vulnerability Detail
-> In the contest's README there is no mention of the Curator role, so it is to be considered RESTRICTED.
-
-When a seller is creating an auction, they specify the address of the curator of their auction once and for all.
-
-https://github.com/sherlock-audit/2024-03-axis-finance/blob/main/moonraker/src/bases/Auctioneer.sol#L215C1-L220C10
-```solidity
-        // Store curation information
-        {
-            FeeData storage fees = lotFees[lotId];
-            fees.curator = routing_.curator;
-            fees.curated = false;
-        }
-```
-
-From then on the only possible action involving the curator is for them to accept the invitation. They can neither be replaced, nor removed. The curator on the other side is allowed to accept the invitation at any point in time before the lot ends and the curator fee for the lot is set to the current fee the curator has set for themselves at the time of acceptance.
-
-https://github.com/sherlock-audit/2024-03-axis-finance/blob/main/moonraker/src/AuctionHouse.sol#L646C1-L652C101
-```solidity
-        if (feeData.curated || module.hasEnded(lotId_) == true) revert InvalidState();
-
-        Routing storage routing = lotRouting[lotId_];
-
-        // Set the curator as approved
-        feeData.curated = true;
-        feeData.curatorFee = fees[keycodeFromVeecode(routing.auctionReference)].curator[msg.sender];
-```
-
-The curator sets their fee by calling `setCuratorFee()` on the auction house:
-
-https://github.com/sherlock-audit/2024-03-axis-finance/blob/main/moonraker/src/bases/FeeManager.sol#L110C1-L116C6
-```solidity
-    function setCuratorFee(Keycode auctionType_, uint48 fee_) external {
-        // Check that the fee is less than the maximum
-        if (fee_ > fees[auctionType_].maxCuratorFee) revert InvalidFee();
-
-        // Set the fee for the sender
-        fees[auctionType_].curator[msg.sender] = fee_;
-    }
-```
-
-As can be seen, the only thing mitigating the damage the curator can do is the `maxCuratorFee` that the protocol itself sets, but that wouldn't do much as this is a global limit and some curators might charge more, others less and if the protocol is to welcome the ones that charge more that would mean they have to set a higher `maxCuratorFee` that curators with bad intentions can take advantage of.
-
-## Impact
-A proposed curator can set their fee to the maximum right before accepting an invitation to curate an auction and thus incur an extra expense for the lot seller. The seller themselves have almost non-existent means to tackle a malicious curator as their only option is to cancel the auction they've set this curator to and this is only an option before the lot has started. After the lot starts the curator is guaranteed to get their fees. For fixed price auctions (atomic) that is every time a buyer calls `purchase()` and for marginal price auctions (batch) that is at `settle()`ment of the auction.
-
-## Code Snippet
-https://github.com/sherlock-audit/2024-03-axis-finance/blob/main/moonraker/src/AuctionHouse.sol#L634-L699
-
-## Tool used
-Manual Review
-
-## Recommendation
-The safety measure I'd recommend for this issue are:
-- Allow the curator to only accept their invitation before the lot has started
-- Allow the seller of a lot to remove a curator as such from the lot
-- Record the curator fee for the lot at the time of creating the lot
-
 
 
 ## Discussion
 
 **sherlock-admin4**
 
-The protocol team fixed this issue in PR/commit https://github.com/Axis-Fi/moonraker/pull/115.
+The protocol team fixed this issue in the following PRs/commits:
+https://github.com/Axis-Fi/moonraker/pull/132
 
-# Issue M-7: Auction Can Be Locked with It's Funds in Decryption Phase in Mainnet Because Massive Gas Payment is Required From Users 
 
-Source: https://github.com/sherlock-audit/2024-03-axis-finance-judging/issues/117 
+**10xhash**
 
-## Found by 
-Kose
-## Summary
-The decryption process in the EMPA module presents a significant issue as it demands a massive amount of gas, potentially locking funds within the contract. With the burden of gas costs falling on auction participants (they are the ones that expected to decrypt the auction), there is little to no incentive to complete the decryption process in the mainnet, leading to funds being trapped within the contract.
-## Vulnerability Detail
-Upon conclusion of a sealed bid batch auction, the settlement process initiates with decryption. It is expected that users will call the decrypt function within the EMPA module, and only after all decryption operations are completed can the settlement proceed.This decryption task is undertaken by users of the protocol without any incentives, except for the incentive to be able to retrieve their amount back if the auction is stuck in the decryption phase, which actually can not be counted as an "incentive".
+> The protocol team fixed this issue in the following PRs/commits: [Axis-Fi/moonraker#132](https://github.com/Axis-Fi/moonraker/pull/132)
 
-Decryption process is very expensive in terms of gas such that it doesn't have to be done in one transaction because it can exceed gas limit of a block. This is also documented by protocol in *[design/EMPA.md](https://github.com/sherlock-audit/2024-03-axis-finance/blob/main/moonraker/design/EMPA.md#auction-settlement-part-1-decryption)* as follows:
->    It may take several decryption transactions depending on the number of bids and gas limit. Once, all bids are decrypted on the contract, we can move to part 2 of the settlement process.
+Fixed
+Now FPAM auctions are not prefunded
 
-While such costs might be acceptable for Layer 2's, they present a serious challenge for mainnet operations. As demonstrated in the provided POC below, even with an auction which has 100 bids in total, the gas cost for decryption escalates to 7 million. Considering the mean gas price in February 2024, which is 40 gwei, and an ETH price of $3500, this translates to nearly $1,000 in gas costs for decryption.
+**sherlock-admin4**
 
-If we consider auctions that have more bids we can reach to more catastrophic scenarios. Here is a demonstration:
-Add following test to *test/modules/auctions/EMPA/settle.t.sol*. Modifier **givenLargeNumberOfUnfilledBids** is created by protocol and it has 1510 total bids in it. You can adjust the number of bids in that modifier to test different bid amounts.
-```solidity
-     function test_largeNumberOfUnfilledBids_gasUsageOfDecryption()
-        external
-        givenLotIsCreated
-        givenLotHasStarted
-        givenLargeNumberOfUnfilledBids
-        givenLotHasConcluded
-        givenPrivateKeyIsSubmitted
-    {
-        EncryptedMarginalPriceAuctionModule.AuctionData memory auctionData = _getAuctionData(_lotId);
-        uint256 gasBefore = gasleft();
-        _module.decryptAndSortBids(_lotId, auctionData.nextBidId - 1);
-        uint256 gasAfter = gasleft();
+The Lead Senior Watson signed off on the fix.
 
-        console2.log(gasBefore - gasAfter);
-    }
-```
-Output:
->  [PASS] test_largeNumberOfUnfilledBids_gasUsageOfDecryption() (gas: 321856062)
-Logs:
-  101789276
-
-In this scenario which has 1510 bids, the gas cost of decryption reached 101 million, hence it needs to be decrypted in at least 4 blocks. The cost of this decryption with 40 gwei gas price is = $14_000 (imagine it during a bullish market season). 
-
-Failure to cover this decryption cost would result in all funds being trapped within the contract. Since there is no way to change the state of the auction once it has concluded, except through decryption, funds cannot be moved. This is an amount that cannot be reasonably expected from users to provide, thus leading to the likelihood of numerous auctions becoming stuck in the decryption phase on the mainnet.
-
-One side note is that settle() process that comes after decryption also is a process that is costly in terms of gas. It worth nearly 1/4 of decryption process. Since decryption phase is costly enough to cause an issue, I didn't go into details of settle() process and it's gas costs in submission.
-## Impact
-Funds belonging to both buyers and sellers will remain trapped within the contract unless someone is willing to pay for a rescue operation. The possibility of a rescue scenario can only be anticipated within auctions where an individual has placed a high-value bid, or it may be expected from the seller. However, in both cases, these users stand to lose a significant amount of funds during the decryption process.
-## Code Snippet
-https://github.com/sherlock-audit/2024-03-axis-finance/blob/main/moonraker/src/modules/auctions/EMPAM.sol/#L441
-## Tool used
-
-Manual Review
-
-## Recommendation
-It would be unfair to suggest changing the decryption process, as it is one of the main functionalities of the system and is necessary for the sealed bid batch auction to function properly. Additionally, limiting bid amounts would not resolve the issue. Therefore, the only feasible solution that comes to mind without requiring extensive changes to the codebase is to refrain from using the mainnet for the EMPA module.
-
-
-
-## Discussion
-
-**Oighty**
-
-Acknowledge decryption and settlement can be expensive. I'm not sure this is an issue as much as a good heads up (and understanding of the system). We are not planning to deploy this module to mainnet initially, but I don't think I put that in the contest notes. However, we are doing a couple things to mitigate this in general:
-1. Working on a more optimized queue implementation that doesn't brick decrypt or settle on so few bids
-2. Due to some of the other "funds stuck" issues, changing the rules on claiming refunds so that a user doesn't get stuck.
-3. Preventing non-gas stuck issues, such as blacklist reverting a major step.
-
-**nevillehuang**
-
-Interesting finding, but could be invalid, not sure if massive gas costs would qualify as medium severity, because at the end of the day, it is still related to "gas optimization".
-
-**nevillehuang**
-
-request poc
-
-If block gas limit is never reached, I believe this issue to be invalid.
-
-**sherlock-admin3**
-
-PoC requested from @kosedogus
-
-Requests remaining: **1**
-
-**kosedogus**
-
-The submission's purpose is related to incentives sir, not gas optimization. I recommended not using the module in mainnet, not optimizing it because it won't change the result that much considering the current implementation can require multiple blocks for decryption. I couldn't find anything related to that in "Criteria for Issue Validity" documentation in Sherlock. For reference for example we know the issues related to "no incentive to liquidate", in those issues liquidation does not provide value to liquidator, instead results in liquidator paying more than incentive because of gas payment is bigger than liquidation prize. In this issue, decryption of bids are given to users, so we can think users as liquidators by analogy. Users has to decrypt the bids in order for process to continue, otherwise all funds will stay locked, if we continue with analogy it is even worst than bad debt accruing. So users have to pay for this decrypt() calls in order for funds to unlock. But as I showed these users have to pay for gas in the range of thousands and in some cases tens of thousands of dollars in mainnet. So it is very easy to encounter scenarios where total locked funds is less than decryption cost. 
-
-That was why I suggested to not deploy to mainnet, there will be many auctions that stuck in decryption phase because of lack of incentive to finish to auction. Sponsor mentioned this won't be deployed in mainnet, which is perfect, then we don't have any problem in this regard. But it wasn't mentioned in anywhere we can see like sponsor mentioned, and in contest README, we saw the protocol will also be deployed to mainnet.
-
-Although I can provide a POC for this process(not for decrypt(), but for settle()) to reach gas limit, I think it is not necessary considering the purpose of the submission. It won't be fair for this issue to be duplicate of gas limit issues (both for those issues and for this issue).
-
-Thank you.
-
-**nevillehuang**
-
-@kosedogus This is an extremely interesting finding, so I will be leaving it open for escalation period. I definitely agree with medium severity, given the potential funds required to decrypt for auctions with higher bids (which could be not uncommon based on sponsors [comments here](https://github.com/sherlock-audit/2024-03-axis-finance-judging/issues/237#issuecomment-2041450204). The trigger seems to be a large number of bids, but the involved fixes are all different due to the different logic in looping through bids during different mechanism (decrypting/refunding/settling)
-
-# Issue M-8: Code that Written in Order to Optimize Gas, Instead Nearly Triples Gas Usage 
-
-Source: https://github.com/sherlock-audit/2024-03-axis-finance-judging/issues/118 
-
-## Found by 
-Kose
-## Summary
-Gas refund mechanism misconception creates a significant amount of gas usage while trying to optimize for gas.
-## Vulnerability Detail
-The settlement process within the auction mechanism is executed by invoking the settle() function in the AuctionHouse. This function trace leads to the _settle() function within the EMPA module. Within this function, an iteration is conducted through all decrypted bids, deleting them individually to facilitate gas refund and prevent potential gas exhaustion during the settlement transaction. This deletion process doesn't provide any value or functionality to function except gas deletion. Here is the process:
-```solidity
-        // Delete the rest of the decrypted bids queue for a gas refund
-        {
-            Queue storage queue = decryptedBids[lotId_];
-            uint256 remainingBids = queue.getNumBids();
-            if (remainingBids > 0) {
-                for (uint256 i = remainingBids - 1; i >= 0; i--) {
-                    uint64 bidId = queue.bidIdList[i];
-                    delete queue.idToBidMap[bidId];
-                    queue.bidIdList.pop();
-
-                    // Otherwise an underflow will occur
-                    if (i == 0) {
-                        break;
-                    }
-                }
-                delete queue.numBids;
-            }
-        }
-```
-As we can see this is done in order to reduce gas consumption in settle() function. While intended to reduce gas consumption within the settle() function, this implementation unfortunately introduces more harm than benefit due to a probable misunderstanding of the gas refund mechanism. 
-
-I will start by showing the harm, then will explain why.
-To illustrate the adverse effects, execute the *test_largeNumberOfUnfilledBids_gasUsage* test using the command *forge test --mt test_largeNumberOfUnfilledBids_gasUsage -vv*. This protocol-implemented test evaluates the gas usage of the _settle() call when there are 1500 bids within an auction, which returns a result of 3,836,948 gas units.
-
-Now if we modify the EMPAM.sol file and remove the part that is passed above from _settle() function and rerun the test, gas usage will dropped significantly to 1,667,850 gas units.
-
-This shows that the mentioned deletion process consumes an excessive amount of gas, totaling approximately 2.2 million gas units if there are 1500 bids in an auction.
-
-Now let's continue with probable gas refund misconception.
-Here are some quotes about gas refund taken from [Ethereum Yellow Paper](https://ethereum.github.io/yellowpaper/paper.pdf):
->   Ar is the refund balance, increased through using the SSTORE instruction in order to reset contract storage to zero from some non-zero value. Though not immediately refunded, it is allowed to partially offset the total execution costs.
-
->   Then the state is finalised by determining the amount to be refunded, g∗ from the remaining gas, g′, plus some allowance from the refund counter, to the sender at the original rate.
-
->    The total refundable amount is the legitimately remaining gas g′, added to Ar, with the latter component being capped up to a maximum of one fifth (rounded down) of the total amount used Tg − g′. Therefore, g∗ is the total gas that remains after the transaction has been executed.
-
->    The max refundable proportion of gas was reduced from one half to one fifth by EIP-3529 by Buterin and Swende [2021] in the London release.
-
->    If there is not enough gas remaining to pay this, i.e. g∗∗ < c, then we also declare an out-of-gas exception. The gas remaining will be zero in any such exceptional condition...... However, the value of the transaction is not transferred to the aborted contract’s address when we are out-of-gas, thus the contract’s code is not stored. If such an exception does not occur, then the remaining gas is refunded to the originator and the now-altered state is allowed to persist.
-
-Let me elaborate what I am trying to show:
-Primarily, gas refunds via this mechanism (Ar) are constrained to one-fifth of the total gas consumed. Hence in the scenario provided above, after gas refunded, 3836948 can at most drop to 3069559, which leads to nearly two times more gas usage while the goal is reducing the gas usage. We don't see the result in test because gas refunds are done after transaction execution finished, which the provided test does not calculate that (it is hard to calculate in Foundry currently, an improvement for this is proposed and will probably be added to Foundry in the near future), it just calculates gas used during the settle() process without considering refund. Which brings us to next problem.
-As we can see from above explanations, gas refunds are done after transaction execution if it is succesful, not in the moment of deleting from queue. Hence if transaction reaches to block gas limit, the refund won't happen and the call will revert.
-
-Now, if we change the number in modifier *givenLargeNumberOfUnfilledBids* from 1500 unfilled bids to 14000 unfilled bids:
-```solidity
-    modifier givenLargeNumberOfUnfilledBids() {
-        // Create 10 bids that will fill capacity
-        for (uint256 i; i < 10; i++) {
-            _createBid(2e18, 1e18);
-        }
-
-        // Create more bids that will not be filled
-        // Lower price, otherwise they will be filled first due to ordering
-        for (uint256 i; i < 14000; i++) {
-            _createBid(19e17, 1e18);
-        }
-
-        // Marginal price: 2
-        _expectedMarginalPrice = _scaleQuoteTokenAmount(2 * _BASE_SCALE);
-        _expectedMarginalBidId = 10;
-
-        _expectedTotalIn = 10 * 2e18;
-        _expectedTotalOut = 10 * 1e18;
-        _;
-    }
-```
-And  rerun the same test both with this gas optimization, and without that optimization part (again with deleting it), we will reach the following results:
-- With optimization = 31,244,540
-- Without optimization = 11,025,345
-
-Hence, as a result of the code implemented for gas optimization, we reach to the block gas limit approximately three times faster. Moreover, due to this acceleration, refunds fail to occur because the transaction cannot succeed under these conditions. Consequently, all funds become locked permanently since the auction has concluded, decryption is complete, and the only callable function, **settle()**, cannot execute due to the gas limit.
-
-This is however is not the main focus of this submission, revert due to block gas limit will happen even if this problem solved, but with this "gas optimization", it is reached 3 times faster which further promotes that problem's likelihood (It's submitted seperately in #3 (EMPA's Can be Locked because of Reaching Block Gas Limit)).  
-
-From Sherlock's Criteria for Issue Validity:
->  List of Issue categories that are not considered valid:
-Gas optimizations: The user/protocol ends up paying a little extra gas because of this issue.
-
-However, the impact of this function goes beyond a mere increment in gas usage. Despite being designed for gas optimization, it at least doubles the amount of gas paid in every settle() call (nearly triples at some cases). Considering that settlement process itself is inherently gas-expensive, with typical usage costing millions of gas, doubling or tripling these amounts could easily escalate gas usage into tens of millions. Therefore, I believe this issue cannot be categorized as merely paying "a little extra gas".
-
-
-## Impact
-The code implemented for gas optimization results in a significant increase in gas usage, ranging from two to three times more than usual. This escalation often reaches into the millions of gas units and, in certain instances, even tens of millions.
-## Code Snippet
-https://github.com/sherlock-audit/2024-03-axis-finance/blob/main/moonraker/src/modules/auctions/EMPAM.sol/#L767-L784
-## Tool used
-
-Manual Review
-
-## Recommendation
-Remove the Queue deleting part from _settle() function in EMPAM.sol
-
-# Issue M-9: EMPAM and FPAM auction modules do not implement catalogue functions 
-
-Source: https://github.com/sherlock-audit/2024-03-axis-finance-judging/issues/130 
-
-## Found by 
-JohnSmith, cryptic
-## Summary
-The `Catalogue.sol` contract contains view functions which provide important information for auctions. These include functions that provide estimates regarding the payout a user will receive for a payment amount, the payment they must send to receive a specific payout, etc. These functions are expected to be implemented by the auction modules. However, `EMPAM.sol` (batch auction module) and `FPAM.sol` (atomic auction module) do not implement these functionalities. This will cause a permanent DoS of the core functionalities of the catalogue contract for these modules and users will not be able to view any information regarding auctions created using either modules and the payments associated with them.
-
-## Vulnerability Detail
-`EMPA.md` states the following (location: /design/EMPA.md):
-
-```solidity
-We will provide a user interface (aka dApp) for both Sellers and Buyers to interact with the product. The key user actions are defined below in the Actions section. The core pages we be:
-- List of auctions (TBD on design and filtering between statuses)
-- Create auction page - for sellers to create new auctions
-- Auction page - Details the status and available actions for a given auction. The auction page will need to support these differents states:
-  - Created - Auction has been created, but not started
-  - Live - Auction is created and currently accepting bids. Buyers should be able to bid and cancel bids they have made.
-  - Concluded - Auction has ended and bids are being decrypted. Anyone should be able to decrypt the bids and submit them to the contract for verification.
-  - Decrypted - Bids are decrypted and awaiting settlement. Anyone should be able to settle the auction.
-  - Settled - Auction payouts have been issued. Buyers that did not win can claim refunds.
-```
-
-Although buyers can view the list of auctions in the provided UI, there's no indication that they can view information regarding prices, which is why the catalogue contract is very important for buyers. They can estimate what price to pay, in quote tokens to receive a specific amount of base tokens, and vice versa. Lets look at exactly which functions will suffer from DoS and why.
-
-`Catalogue::payoutFor`
-```javascript
-    function payoutFor(uint96 lotId_, uint96 amount_) external view returns (uint256) {
-        Auction module = Auctioneer(auctionHouse).getModuleForId(lotId_);
-        Auctioneer.Routing memory routing = getRouting(lotId_);
-
-        // Get protocol fee from FeeManager
-        // TODO depending on whether this is a purchase or a bid, we should use different fee sources
-        (uint48 protocolFee, uint48 referrerFee,) =
-            FeeManager(auctionHouse).fees(keycodeFromVeecode(routing.auctionReference));
-
-        // Calculate fees
-        (uint256 toProtocol, uint256 toReferrer) =
-            FeeManager(auctionHouse).calculateQuoteFees(protocolFee, referrerFee, true, amount_); // we assume there is a referrer to give a conservative amount
-
-        // Get payout from module
-@>      return module.payoutFor(lotId_, amount_ - uint96(toProtocol) - uint96(toReferrer));
-    }
-```
-
-In this function, the user can pass in the id for a lot with the amount of quote tokens they would like to pay. They expect to receive the amount of base tokens they will get for that payment. After deducting fees from the payment, a call to `AuctionModule::payoutFor` is made.
-
-`AuctionModule::payoutFor`
-```javascript
-    function payoutFor(uint96 lotId_, uint96 amount_) public view virtual returns (uint96) {}
-```
-
-The function is expected to be implemented by the auction module (this was also confirmed with the developer team on discord). So far there are two auction modules implemented, `EMPAM.sol` (batch auction module) and `FPAM.sol` (atomic auction module). Sellers can create new auctions within these modules, but they cannot create new modules due to access control.
-
-Looking at `EMPAM.sol` and `FPAM.sol`, neither auctions implement `payoutFor`. When users attempt to call this function, it will revert, and users will be unable to estimate payouts and cannot assess/accomodate their purchases in advance, indefinitely. In addition to `payoutFor`, the following will also suffer from permanent DoS because they are not implemented in either auction modules:
-
-`priceFor`: Users will not be able to estimate the price (including fees, etc) for a specific payout
-`maxPayout`: Users will not be able to check the max payout they may receive for an auction
-`maxAmountAccepted`: Users will not be able to check the max amount of quote tokens accepted for an auction
-
-## Impact
-Permanent DoS of the core functionalities of the Catalogue contract. Buyers will not be able to view information of auctions, especially regarding the prices, which will cause massive hindrance and confusion for buyers. It is very likely that many potential buyers will simply opt-out of participating in these auctions, which will lead to sellers not participating, and overall loss for Axis Finance.
-
-## Code Snippet
-https://github.com/sherlock-audit/2024-03-axis-finance/blob/main/moonraker/src/Catalogue.sol#L72
-
-https://github.com/sherlock-audit/2024-03-axis-finance/blob/main/moonraker/src/modules/Auction.sol#L235
-
-https://github.com/sherlock-audit/2024-03-axis-finance/blob/main/moonraker/src/modules/auctions/EMPAM.sol#L13
-
-https://github.com/sherlock-audit/2024-03-axis-finance/blob/main/moonraker/src/modules/auctions/FPAM.sol#L12
-
-## Tool used
-Manual Review
-
-## Recommendation
-Implement the functions above for both batch (EMPAM) and atomic (FPAM) auctions, so buyers can interact with the catalogue.
-
-
-
-## Discussion
-
-**Oighty**
-
-Acknowledged and will update. The Catalogue is mostly appropriate for atomic auctions or providing functions to get lists of auctions at different states. Given we are refactoring the AuctionHouse into two components. It likely will make sense for Catalogue as well.
-
-# Issue M-10: User's can be grieved by not submitting the private key 
+# Issue M-4: User's can be grieved by not submitting the private key 
 
 Source: https://github.com/sherlock-audit/2024-03-axis-finance-judging/issues/174 
 
@@ -2076,7 +2028,28 @@ Manual Review
 
 Acknowledge the risk involved for the seller and bidder
 
-# Issue M-11: Bidder's payout claim could fail due to validation checks in LinearVesting 
+
+
+## Discussion
+
+**sherlock-admin4**
+
+The protocol team fixed this issue in the following PRs/commits:
+https://github.com/Axis-Fi/moonraker/pull/143
+
+
+**10xhash**
+
+> The protocol team fixed this issue in the following PRs/commits: [Axis-Fi/moonraker#143](https://github.com/Axis-Fi/moonraker/pull/143)
+
+Fixed
+Now bidder's can claim refund unless the private key is submitted following a dedicatedSettlePeriod
+
+**sherlock-admin4**
+
+The Lead Senior Watson signed off on the fix.
+
+# Issue M-5: Bidder's payout claim could fail due to validation checks in LinearVesting 
 
 Source: https://github.com/sherlock-audit/2024-03-axis-finance-judging/issues/178 
 
@@ -2184,9 +2157,22 @@ Allow to mint tokens even after expiry of the vesting token / deploy the derivat
 
 **sherlock-admin4**
 
-The protocol team fixed this issue in PR/commit https://github.com/Axis-Fi/moonraker/pull/116.
+The protocol team fixed this issue in the following PRs/commits:
+https://github.com/Axis-Fi/moonraker/pull/116
 
-# Issue M-12: Inaccurate value is used for partial fill quote amount when calculating fees 
+
+**10xhash**
+
+> The protocol team fixed this issue in the following PRs/commits: [Axis-Fi/moonraker#116](https://github.com/Axis-Fi/moonraker/pull/116)
+
+Fixed
+The expiry check is now removed
+
+**sherlock-admin4**
+
+The Lead Senior Watson signed off on the fix.
+
+# Issue M-6: Inaccurate value is used for partial fill quote amount when calculating fees 
 
 Source: https://github.com/sherlock-audit/2024-03-axis-finance-judging/issues/182 
 
@@ -2501,75 +2487,22 @@ Use `bidAmount - pfRefund` as the quote token input amount value instead of comp
 
 **sherlock-admin4**
 
-The protocol team fixed this issue in PR/commit https://github.com/Axis-Fi/moonraker/pull/119.
-
-# Issue M-13: Max curator fee would be bypassed for existing curators 
-
-Source: https://github.com/sherlock-audit/2024-03-axis-finance-judging/issues/183 
-
-## Found by 
-hash
-## Summary
-Max curator fee would be bypassed for existing curators
-
-## Vulnerability Detail
-
-In the protocol, the admin can set the max fees for curation
-
-```solidity
-    function setFee(Keycode auctionType_, FeeType type_, uint48 fee_) external override onlyOwner {
-        // Check that the fee is a valid percentage
-        if (fee_ > _FEE_DECIMALS) revert InvalidFee();
+The protocol team fixed this issue in the following PRs/commits:
+https://github.com/Axis-Fi/moonraker/pull/140
 
 
-        // Set fee based on type
-        // Or a combination of protocol and referrer fee since they are both in the quoteToken?
-        if (type_ == FeeType.Protocol) {
-            fees[auctionType_].protocol = fee_;
-        } else if (type_ == FeeType.Referrer) {
-            fees[auctionType_].referrer = fee_;
-        } else if (type_ == FeeType.MaxCurator) {
-            fees[auctionType_].maxCuratorFee = fee_;
-        }
-```
+**10xhash**
 
-But even if the max curator fee is lowered, a curator can enjoy their old fees (which can be higher than the current max curator fees) since the curate function doesn't check for this condition
+> The protocol team fixed this issue in the following PRs/commits: [Axis-Fi/moonraker#140](https://github.com/Axis-Fi/moonraker/pull/140)
 
-```solidity
-    function curate(uint96 lotId_, bytes calldata callbackData_) external nonReentrant {
-        
-        ....
-
-        feeData.curated = true;
-        feeData.curatorFee = fees[keycodeFromVeecode(routing.auctionReference)].curator[msg.sender];
-```
-
-## Impact
-
-Curators can obtain a fee higher than the max fee
-
-## Code Snippet
-
-curate function doesn't check the max fee constraint
-https://github.com/sherlock-audit/2024-03-axis-finance/blob/cadf331f12b485bac184111cdc9ba1344d9fbf01/moonraker/src/AuctionHouse.sol#L652
-
-## Tool used
-
-Manual Review
-
-## Recommendation
-
-When fetching the fees inside the curate function, check if the fee is greater than the current max curator fee. If this is the case, set the fees to the max curator fee
-
-
-
-## Discussion
+Fixed
+The partial bid amount for quote fees is now calculated as `bidClaim.paid - bidClaim.refund`
 
 **sherlock-admin4**
 
-The protocol team fixed this issue in PR/commit https://github.com/Axis-Fi/moonraker/pull/124.
+The Lead Senior Watson signed off on the fix.
 
-# Issue M-14: Unsafe casting within _purchase function can result in overflow 
+# Issue M-7: Unsafe casting within _purchase function can result in overflow 
 
 Source: https://github.com/sherlock-audit/2024-03-axis-finance-judging/issues/204 
 
@@ -2657,64 +2590,29 @@ It is possible, but highly unlikely as it requires all of these conditions to be
 
 I do think this is valid. I'll leave it up to the judge to determine severity. The fact that the buyer can receive much fewer tokens than expected, even in an outlandish scenario, shouldn't be possible.
 
-# Issue M-15: No setter for minAuctionDuration 
+**sherlock-admin4**
 
-Source: https://github.com/sherlock-audit/2024-03-axis-finance-judging/issues/224 
-
-## Found by 
-hash
-## Summary
-No setter for minAuctionDuration
-
-## Vulnerability Detail
-
-The `minAuctionDuration` parameters lacks setter functions
-
-```solidity
-    uint48 public minAuctionDuration;
-```
-```solidity
-    constructor(address auctionHouse_) AuctionModule(auctionHouse_) {
-        // Set the minimum auction duration to 1 day initially
-        minAuctionDuration = 1 days;
-    }
-```
-
-## Impact
-
-minAuctionDuration cannot be updated and hence the protocol is stuck with the same duration unless an upgrade is made
-
-## Code Snippet
-
-https://github.com/sherlock-audit/2024-03-axis-finance/blob/cadf331f12b485bac184111cdc9ba1344d9fbf01/moonraker/src/modules/auctions/FPAM.sol#L47-L50
-
-## Tool used
-
-Manual Review
-
-## Recommendation
-
-Add a function to set `minAuctionDuration`
+The protocol team fixed this issue in the following PRs/commits:
+https://github.com/Axis-Fi/moonraker/pull/130
 
 
+**10xhash**
 
-## Discussion
+> The protocol team fixed this issue in the following PRs/commits: [Axis-Fi/moonraker#130](https://github.com/Axis-Fi/moonraker/pull/130)
+
+Fixed
+uint256 is now used, avoiding the unsafe casting
 
 **sherlock-admin4**
 
-The protocol team fixed this issue in PR/commit https://github.com/Axis-Fi/moonraker/pull/117.
+The Lead Senior Watson signed off on the fix.
 
-**nevillehuang**
-
-Not sure if medium severity is appropriate, given no core contract functionality broken even if minimum auction duration is forever not changed. The comment of `// Set the minimum auction duration to 1 day initially` does make it seem like protocol intended for this parameter to be changed in the future
-
-
-# Issue M-16: Settlement of batch auction can exceed the gas limit 
+# Issue M-8: Settlement of batch auction can exceed the gas limit 
 
 Source: https://github.com/sherlock-audit/2024-03-axis-finance-judging/issues/237 
 
 ## Found by 
-0xR360, MrjoryStewartBaxter, flacko, shaka
+0xR360, Kose, MrjoryStewartBaxter, flacko, shaka
 ## Summary
 
 Settlement of batch auction can exceed the gas limit, making it impossible to settle the auction.
@@ -2793,4 +2691,21 @@ In both cases, it would also be recommended to limit the number of decrypted bid
 **Oighty**
 
 Acknowledge. This is valid. We had changed the queue implementation to be less gas intensive on inserts, but it ended up making removals (i.e. settle) more expensive. A priority for us is supporting as many bids on settlement as we can (which allows smaller bid sizes). We're likely going to switch to a linked list implementation to achieve this.
+
+**sherlock-admin4**
+
+The protocol team fixed this issue in the following PRs/commits:
+https://github.com/Axis-Fi/moonraker/pull/137
+
+
+**10xhash**
+
+> The protocol team fixed this issue in the following PRs/commits: [Axis-Fi/moonraker#137](https://github.com/Axis-Fi/moonraker/pull/137)
+
+Fixed
+The implementation is changed from heap to linked list to reduce the gas cost and the max bid count for settlement is reduced to 2500 making the max gas expenditure around 8million for settlement
+
+**sherlock-admin4**
+
+The Lead Senior Watson signed off on the fix.
 
